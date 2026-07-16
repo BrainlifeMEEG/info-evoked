@@ -1,39 +1,55 @@
-# Copyright (c) 2020 brainlife.io
-#
-# This file is a MNE python-based brainlife.io App
+"""
+Print MNE Info summary for evoked data.
+
+This app loads evoked MNE data and writes a text dump of each evoked
+condition's `info` structure, also surfacing it in product.json.
+
+Inputs:
+    - epo: Path to evoked MNE data (.fif)
+
+Outputs:
+    - out_dir/info.txt: Text dump of the evoked info structures
+    - product.json: Metadata containing the info summary
+"""
+
+# Copyright (c) 2026 brainlife.io
 #
 # Author: Kami Salibayeva
-# Indiana University
 
-# set up environment
+import sys
 import os
-import json
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'brainlife_utils'))
+
+# Standard imports
 import mne
 
-# Current path
-__location__ = os.path.realpath(
-    os.path.join(os.getcwd(), os.path.dirname(__file__)))
+# Import shared utilities
+from brainlife_utils import (
+    load_config,
+    ensure_output_dirs,
+    create_product_json,
+    add_info_to_product,
+    require_config_keys
+)
 
-# Populate mne_config.py file with brainlife config.json
-with open(__location__+'/config.json') as config_json:
-    config = json.load(config_json)
+# Ensure output directories exist
+ensure_output_dirs('out_dir')
 
+# Load configuration
+config = load_config()
+require_config_keys(config, ['epo'])
+
+# == LOAD DATA ==
 fname = config['epo']
-
-# Read the raw data and info
 evo = mne.read_evokeds(fname)
 # read info from each evoked list element
 info = [evo[i].info for i in range(len(evo))]
 
-#Save the info into a info.txt file
-with open(os.path.join('out_dir','info.txt'), 'w') as f:
+# == SAVE INFO TEXT FILE ==
+with open(os.path.join('out_dir', 'info.txt'), 'w') as f:
     f.write(str(info))
-    
-# create a product.json file to show the output
-dict_json_product = {'brainlife': []}
 
-info = str(info)
-dict_json_product['brainlife'].append({'type': 'info', 'msg': info})
-
-with open('product.json', 'w') as outfile:
-    json.dump(dict_json_product, outfile)
+# == CREATE PRODUCT.JSON ==
+product_items = []
+add_info_to_product(product_items, str(info))
+create_product_json(product_items)
