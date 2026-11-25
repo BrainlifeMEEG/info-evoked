@@ -1,5 +1,36 @@
 # Create an info text file
 
+<!-- brainlife-app:begin (generated from the App manifest; edit the manifest, not this block) -->
+
+> **Reads the .info attribute of each condition in an MNE evoked file and writes it to a text file for viewing.**
+
+Small utility for inspecting MEG/EEG metadata (channels, sampling rate, filters, projectors) of evoked data. Writes info.txt and shows the same text in the brainlife product view. It reads no configuration parameters.
+
+| | |
+|---|---|
+| 📥 **Inputs** | `neuro/meeg/mne/evoked` |
+| 📤 **Outputs** | `neuro/meg/fif-override` |
+| 🐳 **Container** | `brainlifemeeg/mne:1.12.1` |
+| ⚙️ **Resources** | 1 CPUs |
+| 🔗 **Run it** | [doi.org/10.25663/brainlife.app.819](https://doi.org/10.25663/brainlife.app.819) |
+
+#### 📥 Inputs
+
+| Input | Datatype | Required | Description |
+|---|---|---|---|
+| `evo` | `neuro/meeg/mne/evoked` | yes | MNE evoked data (one or more conditions). |
+
+#### 📤 Outputs
+
+| Output | Datatype | Description |
+|---|---|---|
+| `out_dir` | `neuro/meg/fif-override` | Text dump of each evoked condition's .info (info.txt). |
+
+📚 **References used by this App:**
+- Hayashi S, et al. brainlife.io: a decentralized and open-source cloud platform to support neuroscience research. Nat Methods 21:809-813 (2024). [doi:10.1038/s41592-024-02237-2](https://doi.org/10.1038/s41592-024-02237-2)
+
+<!-- brainlife-app:end -->
+
 [![Run on Brainlife.io](https://img.shields.io/badge/Brainlife-bl.app.819-blue.svg)](https://doi.org/10.25663/brainlife.app.819)
 [![Abcdspec-compliant](https://img.shields.io/badge/ABCD_Spec-v1.1-green.svg)](https://github.com/brain-life/abcd-spec)
 
